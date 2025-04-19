@@ -5,7 +5,6 @@ from preprocess import prepare_data
 from torch.utils.data import random_split
 import os
 
-# Define the model
 class ReviewRegressor(nn.Module):
     def __init__(self, vocab_size, embed_dim=128, hidden_dim=128, num_layers=2):
         super().__init__()
@@ -15,18 +14,16 @@ class ReviewRegressor(nn.Module):
         self.fc = nn.Linear(hidden_dim, 1)
 
     def forward(self, x):
-        embedded = self.embedding(x)              # (B, T) -> (B, T, E)
-        lstm_out, _ = self.lstm(embedded)         # (B, T, H)
-        last_hidden = lstm_out[:, -1, :]          # (B, H)
+        embedded = self.embedding(x)
+        lstm_out, _ = self.lstm(embedded)
+        last_hidden = lstm_out[:, -1, :]
         out = self.dropout(last_hidden)
-        out = self.fc(out).squeeze(1)             # (B,)
+        out = self.fc(out).squeeze(1)
         return out
 
 if __name__ == "__main__":
-    # Load data and vocab
     train_loader, test_loader, vocab = prepare_data()
 
-    # Split off a validation set from training data
     full_train_dataset = train_loader.dataset
     val_size = int(0.1 * len(full_train_dataset))
     train_size = len(full_train_dataset) - val_size
@@ -36,15 +33,12 @@ if __name__ == "__main__":
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
     val_loader = torch.utils.data.DataLoader(val_dataset, batch_size=batch_size)
 
-    # Set device
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    # Initialize model, loss function, optimizer
     model = ReviewRegressor(vocab_size=len(vocab)).to(device)
     loss_fn = nn.MSELoss()
     optimizer = optim.Adam(model.parameters(), lr=1e-3)
 
-    # Training loop with validation monitoring and early stopping
     epochs = 50
     best_val_loss = float('inf')
     patience = 10
@@ -67,7 +61,6 @@ if __name__ == "__main__":
 
         avg_train_loss = total_loss / len(train_loader)
 
-        # Validation
         model.eval()
         val_loss = 0
         with torch.no_grad():
@@ -93,11 +86,11 @@ if __name__ == "__main__":
                     'num_layers': 2
                 }
             }, os.path.join(save_dir, "lstm_model.pt"))
-            print("Best model saved!")
+            print("model saved")
         else:
             patience_counter += 1
             if patience_counter >= patience:
                 print("Early stopping triggered.")
                 break
 
-    print("Training complete. Best model saved to models/lstm_model.pt")
+    print("Training complete. Model saved")

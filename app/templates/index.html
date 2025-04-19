@@ -14,7 +14,6 @@
 
     <form method="POST">
         <div class="row">
-            <!-- Left column: text box + buttons -->
             <div class="col-md-8">
                 <textarea name="review" class="form-control mb-3" rows="6" placeholder="Paste your movie review here...">{{ review_text }}</textarea>
                 <div class="d-flex gap-2">
@@ -23,7 +22,6 @@
                 </div>
             </div>
 
-            <!-- Right column: star rating -->
             <div class="col-md-4 d-flex align-items-center justify-content-center">
                 {% if stars is not none %}
                     <div class="text-center">

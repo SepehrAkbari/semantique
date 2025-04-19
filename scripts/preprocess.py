@@ -9,11 +9,9 @@ import torch
 from torch.utils.data import DataLoader, TensorDataset
 import json
 
-# Use regex-based tokenizer
 def regex_tokenize(text):
     return re.findall(r"\b\w+\b", text.lower())
 
-# Download and extract IMDb dataset
 def download_imdb():
     url = "https://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz"
     filename = "aclImdb_v1.tar.gz"
@@ -29,7 +27,6 @@ def download_imdb():
     else:
         print("IMDb dataset already exists.")
 
-# Load reviews and ratings from text files
 def load_reviews(path):
     reviews = []
     for filepath in glob.glob(path + "/*.txt"):
@@ -39,13 +36,11 @@ def load_reviews(path):
         reviews.append((text, rating))
     return reviews
 
-# Preprocess and tokenize text
 def preprocess(text):
     text = re.sub(r"<.*?>", "", text)
     text = re.sub(r"[^a-zA-Z0-9\s]", "", text)
     return regex_tokenize(text)
 
-# Build vocabulary from tokenized data
 def build_vocab(tokenized_data, vocab_size=20000):
     counter = Counter()
     for tokens, _ in tokenized_data:
@@ -55,18 +50,15 @@ def build_vocab(tokenized_data, vocab_size=20000):
     vocab["<UNK>"] = 1
     return vocab
 
-# Encode tokens using vocabulary
 def encode(tokens, vocab):
     return [vocab.get(token, vocab["<UNK>"]) for token in tokens]
 
-# Pad or truncate sequences to a fixed length
 def pad_sequence(seq, max_len=300):
     if len(seq) < max_len:
         return seq + [0] * (max_len - len(seq))
     else:
         return seq[:max_len]
 
-# Prepare PyTorch tensors and DataLoaders
 def get_dataloaders(train_data, test_data, vocab, max_len=300, batch_size=64):
     X_train = [pad_sequence(encode(tokens, vocab), max_len) for tokens, _ in train_data]
     y_train = [rating for _, rating in train_data]
@@ -87,7 +79,6 @@ def get_dataloaders(train_data, test_data, vocab, max_len=300, batch_size=64):
 
     return train_loader, test_loader
 
-# One-shot function to prepare everything
 def prepare_data():
     download_imdb()
     train_pos = load_reviews("aclImdb/train/pos")
