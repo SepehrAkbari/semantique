@@ -1,0 +1,10 @@
+torch
+torchtext
+flask
+numpy
+pandas
+scikit-learn
+matplotlib
+nltk
+tqdm
+transformers
