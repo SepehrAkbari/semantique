@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JudgementStars</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <h1 class="mb-5">Review Quantifier</h1>
+
+    <form method="POST">
+        <div class="row">
+            <!-- Left column: text box + buttons -->
+            <div class="col-md-8">
+                <textarea name="review" class="form-control mb-3" rows="6" placeholder="Paste your movie review here...">{{ review_text }}</textarea>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Predict Rating</button>
+                    <a href="/" class="btn btn-secondary">Clear</a>
+                </div>
+            </div>
+
+            <!-- Right column: star rating -->
+            <div class="col-md-4 d-flex align-items-center justify-content-center">
+                {% if stars is not none %}
+                    <div class="text-center">
+                        <h4>Rating</h4>
+                        <div class="star-container mb-2">
+                            {% for i in range(1, 6) %}
+                                {% if stars >= i %}
+                                    <i class="fa-solid fa-star star"></i>
+                                {% elif stars + 0.5 == i %}
+                                    <i class="fa-solid fa-star-half-stroke star"></i>
+                                {% else %}
+                                    <i class="fa-regular fa-star star"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <p class="text-muted">({{ stars }} out of 5)</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
