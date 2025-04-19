@@ -8,11 +8,11 @@ This project explores data preprocessing, model design with PyTorch, and deploym
 
 Inputting a review:
 
-![Input](App/Demo/page1.jpeg)
+![Input](app/demo/page1.jpeg)
 
 Predicted rating:
 
-![Predictions](App/Demo/page2.jpeg)
+![Predictions](app/demo/page2.jpeg)
 
 ## Data
 
@@ -51,6 +51,7 @@ pip install -r setup/requirements.txt
 To launch the Flask app:
 
 ```bash
+cd app
 flask run
 ```
 
