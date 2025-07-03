@@ -45,7 +45,7 @@ source .venv/bin/activate
 Install the dependencies:
 
 ```bash
-pip install -r setup/requirements.txt
+pip install -r requirements.txt
 ```
 
 To launch the Flask app:
